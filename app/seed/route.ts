@@ -1,18 +1,6 @@
 import bcrypt from "bcrypt";
-import postgres from "postgres";
 import { invoices, customers, revenue, users } from "../lib/placeholder-data";
-
-const sql = postgres(process.env.POSTGRES_URL!, {
-  host: "localhost",
-  port: 5432,
-  database: process.env.POSTGRES_DB,
-  user: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  ssl:
-    process.env.NODE_ENV === "production"
-      ? { rejectUnauthorized: false }
-      : false,
-});
+import { sql } from "../lib/utils";
 
 async function seedUsers() {
   await sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;

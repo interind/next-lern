@@ -1,4 +1,5 @@
 "use client";
+import { TypePathLink } from "@/app/lib/definitions";
 import {
   UserGroupIcon,
   HomeIcon,
@@ -15,10 +16,7 @@ interface ILink {
   href: TypePathLink;
   icon: typeof HomeIcon;
 }
-type TypePathLink =
-  | "/dashboard"
-  | "/dashboard/invoices"
-  | "/dashboard/customers";
+
 const links: ILink[] = [
   { name: "Home", href: "/dashboard", icon: HomeIcon },
   {

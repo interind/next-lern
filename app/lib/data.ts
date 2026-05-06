@@ -51,16 +51,18 @@ export async function fetchCardData() {
          SUM(CASE WHEN status = 'pending' THEN amount ELSE 0 END) AS "pending"
          FROM invoices`;
 
-    const data = await Promise.all([
+    const [invoiceCount, customerCount, invoiceStatus] = await Promise.all([
       invoiceCountPromise,
       customerCountPromise,
       invoiceStatusPromise,
     ]);
 
-    const numberOfInvoices = Number(data[0][0].count ?? "0");
-    const numberOfCustomers = Number(data[1][0].count ?? "0");
-    const totalPaidInvoices = formatCurrency(data[2][0].paid ?? "0");
-    const totalPendingInvoices = formatCurrency(data[2][0].pending ?? "0");
+    const numberOfInvoices = Number(invoiceCount[0].count ?? "0");
+    const numberOfCustomers = Number(customerCount[0].count ?? "0");
+    const totalPaidInvoices = formatCurrency(invoiceStatus[0].paid ?? "0");
+    const totalPendingInvoices = formatCurrency(
+      invoiceStatus[0].pending ?? "0",
+    );
 
     return {
       numberOfCustomers,
@@ -123,7 +125,7 @@ export async function fetchInvoicesPages(query: string) {
       invoices.status ILIKE ${`%${query}%`}
   `;
 
-    const totalPages = Math.ceil(Number(data[0].count) / ITEMS_PER_PAGE);
+    const totalPages = Math.ceil(Number(data?.[0]?.count) / ITEMS_PER_PAGE);
     return totalPages;
   } catch (error) {
     console.error("Database Error:", error);
